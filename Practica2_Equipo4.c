@@ -9,16 +9,21 @@
 #include <string.h>
 
 #define TAM 5
+#define MAX_INPUT 30
+#define MAX_CP 10
 
 struct info_persona {
-    char nombre[30];
-    char calle_num[30];
-    char ciudad[30];
-    char estado[30];
-    char codigo_postal[10];
+    char nombre[MAX_INPUT];
+    char calle_num[MAX_INPUT];
+    char ciudad[MAX_INPUT];
+    char estado[MAX_INPUT];
+    char codigo_postal[MAX_CP];
 };
 
 int find_register(struct info_persona data[], int data_engaged[]);
+
+void menu(int *opc);
+void clean_buffer();
 void new_register(struct info_persona data[], int count, int data_engaged[]);
 void show_all_registers(struct info_persona data[], int data_engaged[]);
 void show_register(int index, struct info_persona data[]);
@@ -29,13 +34,7 @@ int main() {
     int count = 0;
     while(1) {
         int opc;
-        printf("\nMenu:\n");
-        printf("1. Nuevo registro\n");
-        printf("2. Mostrar todos los registros\n");
-        printf("3. Buscar registro\n");
-        printf("4. Salir\n");
-        printf("Selecciona una opcion: ");
-        scanf("%d", &opc);
+        menu(&opc);
 
         switch(opc) {
             case 1:
@@ -56,34 +55,71 @@ int main() {
     }
 }
 
+void menu(int *opc) {
+    printf("\nMenu:\n");
+    printf("1. Nuevo registro\n");
+    printf("2. Mostrar todos los registros\n");
+    printf("3. Buscar registro\n");
+    printf("4. Salir\n");
+    printf("Selecciona una opcion: ");
+    scanf("%d", opc);
+}
+
 void new_register(struct info_persona data[], int count, int data_engaged[]) {
     printf("\n---NUEVO REGISTRO---\n");
-    if(count < TAM) {
+    if (count < TAM) {
         printf("Nombre: ");
-        scanf("%s", data[count].nombre);
-        scanf("%*[^\n]%*c");
+        if (fgets(data[count].nombre, MAX_INPUT, stdin) != NULL) {
+            data[count].nombre[strcspn(data[count].nombre, "\n")] = '\0';
+        } else {
+            clean_buffer();
+            printf("Error al leer el nombre.\n");
+            return;
+        }
 
         printf("Calle y numero: ");
-        scanf("%s", data[count].calle_num);
-        scanf("%*[^\n]%*c");
-        
+        if (fgets(data[count].calle_num, MAX_INPUT, stdin) != NULL) {
+            data[count].calle_num[strcspn(data[count].calle_num, "\n")] = '\0';
+        } else {
+            clean_buffer();
+            printf("Error al leer la calle y numero.\n");
+            return;
+        }
+
         printf("Ciudad: ");
-        scanf("%s", data[count].ciudad);
-        scanf("%*[^\n]%*c");
-        
+        if (fgets(data[count].ciudad, MAX_INPUT, stdin) != NULL) {
+            data[count].ciudad[strcspn(data[count].ciudad, "\n")] = '\0';
+        } else {
+            clean_buffer();
+            printf("Error al leer la ciudad.\n");
+            return;
+        }
+
         printf("Estado: ");
-        scanf("%s", data[count].estado);
-        scanf("%*[^\n]%*c");
-        
+        if (fgets(data[count].estado, MAX_INPUT, stdin) != NULL) {
+            data[count].estado[strcspn(data[count].estado, "\n")] = '\0';
+        } else {
+            clean_buffer();
+            printf("Error al leer el estado.\n");
+            return;
+        }
+
         printf("Codigo postal: ");
-        scanf("%s", data[count].codigo_postal);
-        scanf("%*[^\n]%*c");
-        
+        if (fgets(data[count].codigo_postal, MAX_INPUT, stdin) != NULL) {
+            data[count].codigo_postal[strcspn(data[count].codigo_postal, "\n")] = '\0';
+        } else {
+            clean_buffer();
+            printf("Error al leer el codigo postal.\n");
+            return;
+        }
+
         data_engaged[count] = 1;
+        printf("Registro agregado con exito.\n");
     } else {
         printf("No se pueden agregar mas registros.\n");
     }
 }
+
 
 void show_all_registers(struct info_persona data[], int data_engaged[]) {
 
@@ -116,5 +152,12 @@ int find_register(struct info_persona data[], int data_engaged[]) {
                 show_register(i, data);
             }
         }
+    }
+}
+
+void clean_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+        // Vacía el búfer
     }
 }
