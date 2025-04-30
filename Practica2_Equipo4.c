@@ -12,7 +12,8 @@
 #define MAX_INPUT 30
 #define MAX_CP 10
 
-struct info_persona {
+struct info_persona
+{
     char nombre[MAX_INPUT];
     char calle_num[MAX_INPUT];
     char ciudad[MAX_INPUT];
@@ -30,39 +31,43 @@ void show_register(int index, struct info_persona data[]);
 void modify_register(int index, struct info_persona data[]);
 void delete_register(int index, struct info_persona data[], int data_engaged[]);
 
-int main() {
+int main()
+{
     struct info_persona people[TAM];
     int data[TAM] = {0, 0, 0, 0, 0};
     int count = 0;
-    while(1) {
+    while (1)
+    {
         int opc;
         menu(&opc);
 
-        switch(opc) {
-            case 1:
-                new_register(people, count, data);
-                count++;
-                break;
-            case 2:
-                show_all_registers(people, data);
-                break;
-            case 3:
-                find_register(people, data);
-                break;
-            case 4:
-                modify_register(find_register(people, data), people);
-                break;
-            case 5:
-                delete_register(find_register(people, data), people, data);
-            case 6:
-                exit(0);
-            default:
-                printf("Opcion no valida.\n");
+        switch (opc)
+        {
+        case 1:
+            new_register(people, count, data);
+            count++;
+            break;
+        case 2:
+            show_all_registers(people, data);
+            break;
+        case 3:
+            find_register(people, data);
+            break;
+        case 4:
+            modify_register(find_register(people, data), people);
+            break;
+        case 5:
+            delete_register(find_register(people, data), people, data);
+        case 6:
+            exit(0);
+        default:
+            printf("Opcion no valida.\n");
         }
     }
 }
 
-void menu(int *opc) {
+void menu(int *opc)
+{
     printf("\nMenu:\n");
     printf("1. Nuevo registro\n");
     printf("2. Mostrar todos los registros\n");
@@ -74,50 +79,67 @@ void menu(int *opc) {
     scanf("%d", opc);
 }
 
-void new_register(struct info_persona data[], int count, int data_engaged[]) {
+void new_register(struct info_persona data[], int count, int data_engaged[])
+{
     clean_buffer(); // Limpiar el buffer para evitar problemas con fgets
     printf("\n---NUEVO REGISTRO---\n");
-    if (count < TAM) {
+    if (count < TAM)
+    {
         printf("Nombre: ");
-        if (fgets(data[count].nombre, MAX_INPUT, stdin) != NULL) {
+        if (fgets(data[count].nombre, MAX_INPUT, stdin) != NULL)
+        {
             data[count].nombre[strcspn(data[count].nombre, "\n")] = '\0';
-        } else {
+        }
+        else
+        {
             clean_buffer();
             printf("Error al leer el nombre.\n");
             return;
         }
 
         printf("Calle y numero: ");
-        if (fgets(data[count].calle_num, MAX_INPUT, stdin) != NULL) {
+        if (fgets(data[count].calle_num, MAX_INPUT, stdin) != NULL)
+        {
             data[count].calle_num[strcspn(data[count].calle_num, "\n")] = '\0';
-        } else {
+        }
+        else
+        {
             clean_buffer();
             printf("Error al leer la calle y numero.\n");
             return;
         }
 
         printf("Ciudad: ");
-        if (fgets(data[count].ciudad, MAX_INPUT, stdin) != NULL) {
+        if (fgets(data[count].ciudad, MAX_INPUT, stdin) != NULL)
+        {
             data[count].ciudad[strcspn(data[count].ciudad, "\n")] = '\0';
-        } else {
+        }
+        else
+        {
             clean_buffer();
             printf("Error al leer la ciudad.\n");
             return;
         }
 
         printf("Estado: ");
-        if (fgets(data[count].estado, MAX_INPUT, stdin) != NULL) {
+        if (fgets(data[count].estado, MAX_INPUT, stdin) != NULL)
+        {
             data[count].estado[strcspn(data[count].estado, "\n")] = '\0';
-        } else {
+        }
+        else
+        {
             clean_buffer();
             printf("Error al leer el estado.\n");
             return;
         }
 
         printf("Codigo postal: ");
-        if (fgets(data[count].codigo_postal, MAX_INPUT, stdin) != NULL) {
+        if (fgets(data[count].codigo_postal, MAX_INPUT, stdin) != NULL)
+        {
             data[count].codigo_postal[strcspn(data[count].codigo_postal, "\n")] = '\0';
-        } else {
+        }
+        else
+        {
             clean_buffer();
             printf("Error al leer el codigo postal.\n");
             return;
@@ -125,26 +147,31 @@ void new_register(struct info_persona data[], int count, int data_engaged[]) {
 
         data_engaged[count] = 1;
         printf("Registro agregado con exito.\n");
-    } else {
+    }
+    else
+    {
         printf("No se pueden agregar mas registros.\n");
     }
     printf("\n----------------\n");
     clean_buffer();
 }
 
-
-void show_all_registers(struct info_persona data[], int data_engaged[]) {
+void show_all_registers(struct info_persona data[], int data_engaged[])
+{
 
     printf("\n---REGISTROS---\n");
-    for(int i = 0; i < TAM; i++) {
-        if(strlen(data[i].nombre) > 0 && data_engaged[i] == 1) {
+    for (int i = 0; i < TAM; i++)
+    {
+        if (strlen(data[i].nombre) > 0 && data_engaged[i] == 1)
+        {
             printf("Registro %d:\n", i + 1);
             show_register(i, data);
         }
     }
 }
 
-void show_register(int index, struct info_persona data[]) {
+void show_register(int index, struct info_persona data[])
+{
     printf("Nombre: %s\n", data[index].nombre);
     printf("Calle y numero: %s\n", data[index].calle_num);
     printf("Ciudad: %s\n", data[index].ciudad);
@@ -153,14 +180,18 @@ void show_register(int index, struct info_persona data[]) {
     printf("----------------\n");
 }
 
-int find_register(struct info_persona data[], int data_engaged[]) {
+int find_register(struct info_persona data[], int data_engaged[])
+{
     printf("\n---BUSCAR REGISTRO---\n");
     char name[30], is_found = 0;
     printf("Ingresa un Nombre: ");
     scanf("%s", name);
-    for(int i = 0; i < TAM; i++) {
-        if(strlen(data[i].nombre) > 0 && data_engaged[i] == 1) {
-            if(strstr(data[i].nombre, name) != NULL) {
+    for (int i = 0; i < TAM; i++)
+    {
+        if (strlen(data[i].nombre) > 0 && data_engaged[i] == 1)
+        {
+            if (strstr(data[i].nombre, name) != NULL)
+            {
                 show_register(i, data);
                 is_found = 1;
             }
@@ -170,9 +201,143 @@ int find_register(struct info_persona data[], int data_engaged[]) {
     return is_found ? 1 : -1;
 }
 
-void clean_buffer() {
+void modify_register(int index, struct info_persona data[])
+{
+    printf("\n---MODIFICAR REGISTRO---\n");
+    int would_modify = 0, option = 0;
+    if (index >= 0)
+    {
+        show_register(index, data);
+        printf("Deseas modificar el registro? (1: Si, 0: No): ");
+        scanf("%d", &would_modify);
+        if (would_modify)
+        {
+            clean_buffer();
+            printf("Que campo deseas modificar?\n");
+            printf("1. Nombre\n");
+            printf("2. Calle y numero\n");
+            printf("3. Ciudad\n");
+            printf("4. Estado\n");
+            printf("5. Codigo postal\n");
+            printf("Selecciona una opcion: ");
+
+            scanf("%d", &option);
+            switch (option)
+            {
+            case 1:
+                printf("Nuevo Nombre: ");
+                if (fgets(data[index].nombre, MAX_INPUT, stdin) != NULL)
+                {
+                    data[index].nombre[strcspn(data[index].nombre, "\n")] = '\0';
+                }
+                else
+                {
+                    clean_buffer();
+                    printf("Error al leer el nombre.\n");
+                    return;
+                }
+                break;
+            case 2:
+                printf("Nueva Calle y numero: ");
+                if (fgets(data[index].calle_num, MAX_INPUT, stdin) != NULL)
+                {
+                    data[index].calle_num[strcspn(data[index].calle_num, "\n")] = '\0';
+                }
+                else
+                {
+                    clean_buffer();
+                    printf("Error al leer la calle y numero.\n");
+                    return;
+                }
+                break;
+            case 3:
+                printf("Nueva Ciudad: ");
+                if (fgets(data[index].ciudad, MAX_INPUT, stdin) != NULL)
+                {
+                    data[index].ciudad[strcspn(data[index].ciudad, "\n")] = '\0';
+                }
+                else
+                {
+                    clean_buffer();
+                    printf("Error al leer la ciudad.\n");
+                    return;
+                }
+                break;
+            case 4:
+                printf("Nuevo Estado: ");
+                if (fgets(data[index].estado, MAX_INPUT, stdin) != NULL)
+                {
+                    data[index].estado[strcspn(data[index].estado, "\n")] = '\0';
+                }
+                else
+                {
+                    clean_buffer();
+                    printf("Error al leer el estado.\n");
+                    return;
+                }
+                break;
+            case 5:
+                printf("Nuevo Codigo postal: ");
+                if (fgets(data[index].codigo_postal, MAX_INPUT, stdin) != NULL)
+                {
+                    data[index].codigo_postal[strcspn(data[index].codigo_postal, "\n")] = '\0';
+                }
+                else
+                {
+                    clean_buffer();
+                    printf("Error al leer el codigo postal.\n");
+                    return;
+                }
+                break;
+            default:
+                printf("Opcion no valida.\n");
+                return;
+            }
+            clean_buffer();
+        }
+        else
+        {
+            printf("No se modifico el registro.\n");
+        }
+    }
+    else
+    {
+        printf("No se encontro el registro.\n");
+    }
+    printf("\n----------------\n");
+}
+
+void delete_register(int index, struct info_persona data[], int data_engaged[])
+{
+    printf("\n---ELIMINAR REGISTRO---\n");
+    int would_delete = 0;
+    if (index >= 0)
+    {
+        show_register(index, data);
+        printf("Deseas eliminar el registro? (1: Si, 0: No): ");
+        scanf("%d", &would_delete);
+        if (would_delete)
+        {
+            data_engaged[index] = 0;
+            printf("Registro eliminado con exito.\n");
+        }
+        else
+        {
+            printf("No se elimino el registro.\n");
+        }
+    }
+    else
+    {
+        printf("No se encontro el registro.\n");
+    }
+    printf("\n----------------\n");
+}
+
+void clean_buffer()
+{
     int c;
-    while ((c = getchar()) != '\n' && c != EOF) {
+    while ((c = getchar()) != '\n' && c != EOF)
+    {
         // Vacía el búfer
     }
 }
