@@ -229,7 +229,7 @@ void modify_register(int index, struct info_persona data[])
     char name[MAX_INPUT], calle_num[MAX_INPUT], ciudad[MAX_INPUT], estado[MAX_INPUT], codigo_postal[MAX_CP];
     if (index >= 0)
     {
-        show_register(index, data);
+        
         printf("Deseas modificar el registro? (1: Si, 0: No): ");
         scanf("%d", &would_modify);
         if (would_modify)
@@ -336,7 +336,6 @@ void delete_register(int index, struct info_persona data[], int data_engaged[])
     int would_delete = 0;
     if (index >= 0)
     {
-        show_register(index, data);
         printf("Deseas eliminar el registro? (1: Si, 0: No): ");
         scanf("%d", &would_delete);
         if (would_delete)
