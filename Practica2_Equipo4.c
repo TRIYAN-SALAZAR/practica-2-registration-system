@@ -36,6 +36,7 @@ int main()
     struct info_persona people[TAM];
     int data[TAM] = {0, 0, 0, 0, 0};
     int count = 0, index;
+
     while (1)
     {
         int opc;
@@ -73,6 +74,7 @@ int main()
             } else {
                 printf("Registro no encontrado.\n");
             }
+            break;
         case 6:
             exit(0);
         default:
@@ -96,7 +98,7 @@ void menu(int *opc)
 
 void new_register(struct info_persona data[], int count, int data_engaged[])
 {
-    clean_buffer(); // Limpiar el buffer para evitar problemas con fgets
+    clean_buffer();
     printf("\n---NUEVO REGISTRO---\n");
     if (count < TAM)
     {
@@ -246,10 +248,10 @@ void modify_register(int index, struct info_persona data[])
             {
             case 1:
                 printf("Nuevo Nombre: ");
-                if (fgets(name, MAX_INPUT, stdin) != NULL)
+                clean_buffer();
+                if (fgets(data[index].nombre, MAX_INPUT, stdin) != NULL)
                 {
-                    data[index].nombre[strcspn(name, "\n")] = '\0';
-                    strcpy(data[index].nombre, name);
+                    data[index].nombre[strcspn(data[index].nombre, "\n")] = '\0';
                 }
                 else
                 {
