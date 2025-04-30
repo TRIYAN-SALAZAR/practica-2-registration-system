@@ -119,6 +119,8 @@ void new_register(struct info_persona data[], int count, int data_engaged[]) {
     } else {
         printf("No se pueden agregar mas registros.\n");
     }
+    printf("\n----------------\n");
+    clean_buffer();
 }
 
 
@@ -144,16 +146,18 @@ void show_register(int index, struct info_persona data[]) {
 
 int find_register(struct info_persona data[], int data_engaged[]) {
     printf("\n---BUSCAR REGISTRO---\n");
-    char title[30];
-    printf("Ingresa una palabra clave del titulo del libro: ");
-    scanf("%s", title);
+    char name[30];
+    printf("Ingresa un Nombre: ");
+    scanf("%s", name);
     for(int i = 0; i < TAM; i++) {
         if(strlen(data[i].nombre) > 0 && data_engaged[i] == 1) {
-            if(strstr(data[i].nombre, title) != NULL) {
+            if(strstr(data[i].nombre, name) != NULL) {
                 show_register(i, data);
             }
         }
     }
+    printf("\n----------------\n");
+    return 0;
 }
 
 void clean_buffer() {
