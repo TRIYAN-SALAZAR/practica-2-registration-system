@@ -66,6 +66,7 @@ void menu(int *opc) {
 }
 
 void new_register(struct info_persona data[], int count, int data_engaged[]) {
+    clean_buffer(); // Limpiar el buffer para evitar problemas con fgets
     printf("\n---NUEVO REGISTRO---\n");
     if (count < TAM) {
         printf("Nombre: ");
