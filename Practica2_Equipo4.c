@@ -35,7 +35,7 @@ int main()
 {
     struct info_persona people[TAM];
     int data[TAM] = {0, 0, 0, 0, 0};
-    int count = 0;
+    int count = 0, index;
     while (1)
     {
         int opc;
@@ -51,13 +51,28 @@ int main()
             show_all_registers(people, data);
             break;
         case 3:
-            find_register(people, data);
+            index = find_register(people, data);
+            if (index != -1) {
+                show_register(index, people);
+            } else {
+                printf("Registro no encontrado.\n");
+            }
             break;
         case 4:
-            modify_register(find_register(people, data), people);
+            index = find_register(people, data);
+            if (index != -1) {
+                modify_register(index, people);
+            } else {
+                printf("Registro no encontrado.\n");
+            }
             break;
         case 5:
-            delete_register(find_register(people, data), people, data);
+            index = find_register(people, data);
+            if (index != -1) {
+                delete_register(index, people, data);
+            } else {
+                printf("Registro no encontrado.\n");
+            }
         case 6:
             exit(0);
         default:
@@ -183,9 +198,12 @@ void show_register(int index, struct info_persona data[])
 int find_register(struct info_persona data[], int data_engaged[])
 {
     printf("\n---BUSCAR REGISTRO---\n");
-    char name[30], is_found = 0;
+    char name[30], is_found = 0, index = -1;
     printf("Ingresa un Nombre: ");
-    scanf("%s", name);
+    clean_buffer();
+    fgets(name, sizeof(name), stdin);
+    name[strcspn(name, "\n")] = '\0';
+
     for (int i = 0; i < TAM; i++)
     {
         if (strlen(data[i].nombre) > 0 && data_engaged[i] == 1)
@@ -194,17 +212,19 @@ int find_register(struct info_persona data[], int data_engaged[])
             {
                 show_register(i, data);
                 is_found = 1;
+                index = i;
             }
         }
     }
     printf("\n----------------\n");
-    return is_found ? 1 : -1;
+    return is_found ? index : -1;
 }
 
 void modify_register(int index, struct info_persona data[])
 {
     printf("\n---MODIFICAR REGISTRO---\n");
     int would_modify = 0, option = 0;
+    char name[MAX_INPUT], calle_num[MAX_INPUT], ciudad[MAX_INPUT], estado[MAX_INPUT], codigo_postal[MAX_CP];
     if (index >= 0)
     {
         show_register(index, data);
@@ -226,9 +246,10 @@ void modify_register(int index, struct info_persona data[])
             {
             case 1:
                 printf("Nuevo Nombre: ");
-                if (fgets(data[index].nombre, MAX_INPUT, stdin) != NULL)
+                if (fgets(name, MAX_INPUT, stdin) != NULL)
                 {
-                    data[index].nombre[strcspn(data[index].nombre, "\n")] = '\0';
+                    data[index].nombre[strcspn(name, "\n")] = '\0';
+                    strcpy(data[index].nombre, name);
                 }
                 else
                 {
@@ -239,6 +260,7 @@ void modify_register(int index, struct info_persona data[])
                 break;
             case 2:
                 printf("Nueva Calle y numero: ");
+                clean_buffer();
                 if (fgets(data[index].calle_num, MAX_INPUT, stdin) != NULL)
                 {
                     data[index].calle_num[strcspn(data[index].calle_num, "\n")] = '\0';
@@ -252,6 +274,7 @@ void modify_register(int index, struct info_persona data[])
                 break;
             case 3:
                 printf("Nueva Ciudad: ");
+                clean_buffer();
                 if (fgets(data[index].ciudad, MAX_INPUT, stdin) != NULL)
                 {
                     data[index].ciudad[strcspn(data[index].ciudad, "\n")] = '\0';
@@ -265,6 +288,7 @@ void modify_register(int index, struct info_persona data[])
                 break;
             case 4:
                 printf("Nuevo Estado: ");
+                clean_buffer();
                 if (fgets(data[index].estado, MAX_INPUT, stdin) != NULL)
                 {
                     data[index].estado[strcspn(data[index].estado, "\n")] = '\0';
@@ -278,6 +302,7 @@ void modify_register(int index, struct info_persona data[])
                 break;
             case 5:
                 printf("Nuevo Codigo postal: ");
+                clean_buffer();
                 if (fgets(data[index].codigo_postal, MAX_INPUT, stdin) != NULL)
                 {
                     data[index].codigo_postal[strcspn(data[index].codigo_postal, "\n")] = '\0';
@@ -299,10 +324,6 @@ void modify_register(int index, struct info_persona data[])
         {
             printf("No se modifico el registro.\n");
         }
-    }
-    else
-    {
-        printf("No se encontro el registro.\n");
     }
     printf("\n----------------\n");
 }
